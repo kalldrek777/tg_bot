@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bot',
+
+
 ]
 
 MIDDLEWARE = [
@@ -129,6 +131,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # настройки бота
 
 TOKEN = '5612195369:AAHAvCNlHZF01jZLs1guDY39Lj1_OjfhOuI'
-ip = '172.67.180.25'
-port = '80'
-PROXY_URL = 'socks5://{}:{}'.format(ip,port)
+# ip = '172.67.180.25'
+# port = '80'
+# PROXY_URL = 'socks5://{}:{}'.format(ip, port)
