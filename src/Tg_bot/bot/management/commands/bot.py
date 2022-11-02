@@ -28,40 +28,9 @@ button = KeyboardButton('/stop')
 button_2 = KeyboardButton('/start')
 greet_kb = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True).add(button)
 greet_kb_2 = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True).add(button_2)
-# @dp.message_handler(commands=['start'])
-# async def echo_send(message: types.Message):
-#     # async def main():
-#     list = []
-#     mist = []
-#     weekdays = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
-#     res = await calendar.range_date(
-#         (datetime.today() + timedelta(days=1)),
-#         (datetime.today() + timedelta(days=8)))
-#     for k, v in res.items():
-#         if v == DateType.NOT_WORKING:
-#             list.append(k)
-#     for i in list:
-#         a = i.split('.')
-#         b = i + "-" + weekdays[datetime(int(a[0]), int(a[1]), int(a[2])).weekday()]
-#         mist.append(b)
-#
-#     await bot.send_message(message.from_user.id, 'sdfasdfasd')
 
 
-@dp.message_handler(commands=['stop'])
-async def stop(message: types.Message):
-    await delete_profile(user_id=message.from_user.id)
-    await bot.send_message(message.from_user.id, 'Вы остановили бота', reply_markup=greet_kb_2)
-
-
-@dp.message_handler(commands=['start'])
-async def start(message: types.Message):
-    # global id
-    id = message.from_user.id
-    await create_profile(user_id=id)
-
-
-async def gg():
+async def day():
     list = []
     mist = []
     weekdays = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
@@ -75,7 +44,45 @@ async def gg():
         a = i.split('.')
         b = i + "-" + weekdays[datetime(int(a[0]), int(a[1]), int(a[2])).weekday()]
         mist.append(b)
+    return mist
 
+
+@dp.message_handler(commands=['stop'])
+async def stop(message: types.Message):
+    await delete_profile(user_id=message.from_user.id)
+    await bot.send_message(message.from_user.id, 'Вы остановили бота', reply_markup=greet_kb_2)
+
+
+@dp.message_handler(commands=['start'])
+async def start(message: types.Message):
+    # global id
+    id = message.from_user.id
+    await create_profile(user_id=id)
+    mist = await day()
+    users = await get_users()
+    for user in users:
+        try:
+            await bot.send_message(user[0], 'На следующей неделе у вас выходные:' '\n' + '\n'.join(
+                '{}'.format(item) for item in mist), reply_markup=greet_kb)
+        except:
+            pass
+
+
+async def gg():
+    # list = []
+    # mist = []
+    # weekdays = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
+    # res = await calendar.range_date(
+    #     (datetime.today() + timedelta(days=1)),
+    #     (datetime.today() + timedelta(days=8)))
+    # for k, v in res.items():
+    #     if v == DateType.NOT_WORKING:
+    #         list.append(k)
+    # for i in list:
+    #     a = i.split('.')
+    #     b = i + "-" + weekdays[datetime(int(a[0]), int(a[1]), int(a[2])).weekday()]
+    #     mist.append(b)
+    mist = await day()
     users = await get_users()
     for user in users:
         try:
@@ -85,7 +92,7 @@ async def gg():
 
 
 async def scheduler():
-    aioschedule.every(3).seconds.do(gg)
+    aioschedule.every().sunday.do(gg)
     while True:
         await aioschedule.run_pending()
         await asyncio.sleep(1)
