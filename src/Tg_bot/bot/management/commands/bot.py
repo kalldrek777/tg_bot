@@ -59,29 +59,12 @@ async def start(message: types.Message):
     id = message.from_user.id
     await create_profile(user_id=id)
     mist = await day()
-    users = await get_users()
-    for user in users:
-        try:
-            await bot.send_message(user[0], 'На следующей неделе у вас выходные:' '\n' + '\n'.join(
+    await bot.send_message(id, 'На следующей неделе у вас выходные:' '\n' + '\n'.join(
                 '{}'.format(item) for item in mist), reply_markup=greet_kb)
-        except:
-            pass
+
 
 
 async def gg():
-    # list = []
-    # mist = []
-    # weekdays = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
-    # res = await calendar.range_date(
-    #     (datetime.today() + timedelta(days=1)),
-    #     (datetime.today() + timedelta(days=8)))
-    # for k, v in res.items():
-    #     if v == DateType.NOT_WORKING:
-    #         list.append(k)
-    # for i in list:
-    #     a = i.split('.')
-    #     b = i + "-" + weekdays[datetime(int(a[0]), int(a[1]), int(a[2])).weekday()]
-    #     mist.append(b)
     mist = await day()
     users = await get_users()
     for user in users:
