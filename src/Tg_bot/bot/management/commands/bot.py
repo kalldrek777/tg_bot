@@ -75,7 +75,7 @@ async def gg():
 
 
 async def scheduler():
-    aioschedule.every().sunday.do(gg)
+    aioschedule.every().sunday.at("12:00").do(gg)
     while True:
         await aioschedule.run_pending()
         await asyncio.sleep(1)
